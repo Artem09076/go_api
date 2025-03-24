@@ -10,6 +10,6 @@ func ContactRoutes(a *fiber.App) {
 
 	route.Get("/", controllers.GetContact)
 	route.Post("/", controllers.PostContact)
-	route.Put("/", controllers.PutContact)
-	route.Delete("/", controllers.DeleteContact)
+	route.Put("/:id", controllers.PutContact)
+	route.Delete("/:id", controllers.DeleteContact)
 }

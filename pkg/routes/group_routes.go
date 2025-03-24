@@ -10,7 +10,7 @@ func GroupRoutes(a *fiber.App) {
 
 	routes.Get("/", controllers.GetGroup)
 	routes.Post("/", controllers.PostGroup)
-	routes.Put("/", controllers.PutGroup)
-	routes.Delete("/", controllers.DeleteGroup)
+	routes.Put("/:id", controllers.PutGroup)
+	routes.Delete("/:id", controllers.DeleteGroup)
 
 }
