@@ -1,0 +1,5 @@
+DROP TABLE IF EXISTS  public."group" CASCADE;
+
+DROP TABLE IF EXISTS  public.contact CASCADE;
+
+DROP TABLE IF EXISTS  public.phone CASCADE;

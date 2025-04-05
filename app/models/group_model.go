@@ -1,8 +1,9 @@
 package models
 
+import "github.com/google/uuid"
+
 type Group struct {
-	ID          int
-	Title       string
-	Description string
-	Contacts    []int
+	ID           uuid.UUID `db:"id" json:"id"`
+	Title        string    `db:"title" json:"title"`
+	Descriptions string    `db:"descriptions" json:"descriptions"`
 }

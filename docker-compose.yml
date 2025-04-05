@@ -1,4 +1,30 @@
 services:
+  db:
+    image: postgres:13.2
+    ports:
+      - "127.0.0.1:5432:5432"
+    command: [ "postgres", "-c", "log_statement=all", "-c", "log_destination=stderr" ]
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-U", "${DB_USER}", "-d", "${DB_NAME}" ]
+      interval: 1s
+      retries: 20
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - database-data:/var/lib/postgresql/data
+
+  migrations:
+    image: migrate/migrate
+    volumes:
+      - ./migrations:/migrations
+    depends_on:
+      db:
+        condition: service_healthy
+    command: ["-path", "migrations/", "-database", "postgresql://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_USER?sslmode=disable", "$DB_VERSION"]
+
+    
   mysuperapp-1:
     build:
       context: .
@@ -17,14 +43,10 @@ services:
       context: .
       dockerfile: Dockerfile
 
-
-
   contact-service-3:
     build:
       context: .
       dockerfile: Dockerfile
-
-
 
   balancer:
     image: nginx:alpine3.21
@@ -32,3 +54,6 @@ services:
       - 8080:80
     volumes:
       - ./nginx:/etc/nginx/templates
+
+volumes:
+  database-data:

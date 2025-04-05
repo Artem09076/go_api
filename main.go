@@ -4,6 +4,7 @@ import (
 	"log"
 
 	"github.com/Artem09076/go_api.git/pkg/routes"
+	"github.com/Artem09076/go_api.git/platform/database"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	_ "github.com/joho/godotenv/autoload"
@@ -17,7 +18,7 @@ func main() {
 	app.Get("/", func(c *fiber.Ctx) error {
 		return c.SendString("AAAAAAAAA")
 	})
-
+	database.PostgreSQLConnection()
 	routes.ContactRoutes(app)
 	routes.GroupRoutes(app)
 
