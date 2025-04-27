@@ -5,6 +5,7 @@ import (
 	"log"
 	"net"
 
+	"github.com/Artem09076/go_api.git/app/server/methods"
 	"github.com/Artem09076/go_api.git/internal/db/sqlc"
 	protos "github.com/Artem09076/go_api.git/protos/gen"
 	_ "github.com/lib/pq"
@@ -26,9 +27,11 @@ func main() {
 	queries := sqlc.New(db)
 	srv := grpc.NewServer()
 
-	svc := NewContactServer(queries)
+	svc := methods.NewContactServer(queries)
+	svg := methods.NewGroupServer(queries)
 
 	protos.RegisterContactServiceServer(srv, svc)
+	protos.RegisterGroupServiceServer(srv, svg)
 
 	if err := srv.Serve(listener); err != nil {
 		log.Fatalln()
