@@ -24,7 +24,8 @@ func main() {
 		}
 	}()
 
-	client := protos.NewContactServiceClient(conn)
+	contact_client := protos.NewContactServiceClient(conn)
+	group_client := protos.NewGroupServiceClient(conn)
 
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
 	defer cancel()
@@ -34,10 +35,20 @@ func main() {
 		Email:    "johndoe@example.com",
 	}
 
-	contact, err := client.CreateContact(ctx, createReq)
+	creategroupReq := &protos.CreateGroupRequest{
+		Title:        "asdf",
+		Descriptions: "asdfvser",
+	}
+
+	contact, err := contact_client.CreateContact(ctx, createReq)
 	if err != nil {
 		log.Fatalf("could not create contact: %v", err)
 	}
 
 	log.Printf("Contact created: %v", contact)
+	group, err := group_client.CreateGroup(ctx, creategroupReq)
+	if err != nil {
+		log.Fatalf("could not group contact: %v", err)
+	}
+	log.Printf("Group created: %v", group)
 }
