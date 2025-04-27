@@ -1,3 +1,5 @@
+-- +goose Up
+-- +goose StatementBegin
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 CREATE TABLE IF NOT EXISTS public."group"
@@ -28,5 +30,13 @@ CREATE TABLE IF NOT EXISTS public.phone
     contact_id UUID REFERENCES public.contact(id),
     PRIMARY KEY (id)
 );
+-- +goose StatementEnd
 
+-- +goose Down
+-- +goose StatementBegin
+DROP TABLE IF EXISTS  public."group" CASCADE;
 
+DROP TABLE IF EXISTS  public.contact CASCADE;
+
+DROP TABLE IF EXISTS  public.phone CASCADE;
+-- +goose StatementEnd

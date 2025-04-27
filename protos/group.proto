@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package proto;
+option go_package = "github.com/Artem09076/go_api/protos/gen/protos";
+service GroupService {
+  rpc CreateGroup (CreateGroupRequest) returns (Group);
+  rpc GetGroup (GetGroupRequest) returns (Group);
+  rpc UpdateGroup (UpdateGroupRequest) returns (Group);
+  rpc DeleteGroup (DeleteGroupRequest) returns (EmptyGroup);
+}
+
+message Group {
+  string id = 1;
+  string title = 2;
+  string descriptions = 3;
+}
+
+message CreateGroupRequest {
+  string title = 1;
+  string descriptions = 2;
+}
+
+message GetGroupRequest {
+  string id = 1;
+}
+
+message UpdateGroupRequest {
+  string id = 1;
+  string title = 2;
+  string descriptions = 3;
+}
+
+message DeleteGroupRequest {
+  string id = 1;
+}
+
+message EmptyGroup {}

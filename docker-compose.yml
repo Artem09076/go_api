@@ -14,46 +14,20 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
     volumes:
       - database-data:/var/lib/postgresql/data
-
+  
   migrations:
-    image: migrate/migrate
-    volumes:
-      - ./migrations:/migrations
+    image: ghcr.io/kukymbr/goose-docker:3.24.2
+    restart: no
     depends_on:
       db:
         condition: service_healthy
-    command: ["-path", "migrations/", "-database", "postgresql://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_USER?sslmode=disable", "$DB_VERSION"]
-
-    
-  mysuperapp-1:
-    build:
-      context: .
-      dockerfile: Dockerfile
-
-
-  contact-service-1:
-    build:
-      context: .
-      dockerfile: Dockerfile
-
-
-
-  contact-service-2:
-    build:
-      context: .
-      dockerfile: Dockerfile
-
-  contact-service-3:
-    build:
-      context: .
-      dockerfile: Dockerfile
-
-  balancer:
-    image: nginx:alpine3.21
-    ports:
-      - 8080:80
+    environment:
+      - GOOSE_DRIVER=postgres
+      - GOOSE_DBSTRING=host=${DB_HOST} port=${DB_PORT} user=${DB_USER} password=${DB_PASSWORD} dbname=${DB_NAME}
+      - GOOSE_VERBOSE=true
+      - GOOSE_COMMAND=${GOOSE_COMMAND}
+      - GOOSE_COMMAND_ARG=${GOOSE_COMMAND_ARG}
     volumes:
-      - ./nginx:/etc/nginx/templates
-
+      - ./internal/db/migrations:/migrations
 volumes:
   database-data:
